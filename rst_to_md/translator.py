@@ -283,7 +283,7 @@ class Translator(nodes.NodeVisitor):
 
         class ListItemContext(Context):
             def finalize(self):
-                front = ['- {}'.format(fix_crs(l)) for l in self.body[:1]]
+                front = ['* {}'.format(fix_crs(l)) for l in self.body[:1]]
                 middle = [fix_crs(e) for e in self.body[1:-1]]
                 back = self.body[-1:]
                 self.body = front + middle + back
