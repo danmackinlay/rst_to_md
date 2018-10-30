@@ -297,7 +297,16 @@ class Translator(nodes.NodeVisitor):
         self.output.put_body('[')
 
     def depart_reference(self, node):
-        self.output.put_body(']({})'.format(node.attributes['refuri']))
+        if 'refuri' in node.attributes:
+            refuri = node.attributes['refuri']
+        else:
+            refuri = "#{}".format(node.astext())
+            self.document.reporter.warning(
+                'No refuri on {!r}. '
+                'Assuming internal link {}'.format(
+                    node, refuri
+                ))
+        self.output.put_body(']({})'.format(refuri))
 
     def visit_target(self, node):
         # We don't do targets right now. Should we?
