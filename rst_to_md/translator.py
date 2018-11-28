@@ -293,6 +293,42 @@ class Translator(nodes.NodeVisitor):
     def depart_list_item(self, node):
         self.pop_context()
 
+    def visit_definition_list(self, node):
+        # print("//////definition_list", node)
+        class DefinitionListContext(Context):
+            def finalize(self):
+                front = ['* {}'.format(fix_crs(l)) for l in self.body[:1]]
+                middle = self.body[1:-1]
+                back = self.body[-1:]
+                self.body = front + middle + back
+
+        self.push_context(DefinitionListContext())
+
+    def depart_definition_list(self, node):
+        pass
+
+    def visit_definition_list_item(self, node):
+        # print("//////definition_list_item", node)
+        pass
+
+    def depart_definition_list_item(self, node):
+        pass
+
+    def visit_term(self, node):
+        print("//////term", node)
+        self.output.put_body("\n")
+
+    def depart_term(self, node):
+        # self.output.put_body("\n")
+        pass
+
+    def visit_definition(self, node):
+        print("//////definition", node)
+        self.output.put_body("\n:   ")
+
+    def depart_definition(self, node):
+        pass
+
     def visit_reference(self, node):
         self.output.put_body('[')
 
